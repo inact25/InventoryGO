@@ -3,7 +3,7 @@ Tech Inventory App using Golang and Console
 
 ## create config file
 
-create [config.env], and put it into root of your project folder.Then fill it with :
+create [config.env](https://github.com/inact25/InventoryGO), and put it into root of your project folder.Then fill it with :
 ```env
 DbEngine = 'mysql'
 DbUser = 'root'
