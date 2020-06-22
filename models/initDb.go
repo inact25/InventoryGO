@@ -7,7 +7,6 @@ import (
 
 //StartConnection : start connection to database
 func StartConnection(engine, data string) (*sql.DB, error) {
-
 	db, err := sql.Open(engine, data)
 	if err != nil {
 		log.Fatal(err)

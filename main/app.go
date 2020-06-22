@@ -37,14 +37,21 @@ func main() {
 	DbSchema = utils.GetCustomConf("DbSchema", "mydatabase")
 
 	dataSource := fmt.Sprintf("%s:%s%s(%s:%s)/%s", DbUser, DbPass, DbConnection, DbHost, DbPort, DbSchema)
+	view.MainMenu()
+
+	// ---
 	mydb, err := models.StartConnection(DbEngine, dataSource)
 	if err != nil {
 		log.Panic(err)
 	}
 	env := &Env{db: mydb}
-
 	productService := services.ViewAllProductService(env.db)
-	products := productService.GetDataProduct(1, 3)
+	products := productService.GetDataProduct(1, 50)
+	// //------------------------------------
+	transactionService := services.ViewAllTransactionService(env.db)
+	transaction := transactionService.GetDataTransaction(1, 50)
+
+	view.ViewAllTransaction(transaction)
 	view.ViewAllProduct(products)
 
 }
