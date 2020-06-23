@@ -40,6 +40,7 @@ func GetDataProduct(db *sql.DB, pageNo, totalPerPage int) ([]*Product, error) {
 		if err != nil {
 			log.Fatalf("%v", err)
 			return nil, err
+
 		}
 		products = append(products, p)
 	}

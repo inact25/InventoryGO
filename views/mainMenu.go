@@ -9,8 +9,8 @@ import (
 var conf = config.NewAppConfig()
 
 func MainMenu() {
+	tools.Cls()
 	var choose string
-
 	//id := 1
 	menu := []string{"Product's Data", "Product's Transaction", "Product's Report"}
 	fmt.Println("-----------------------------------------------")
@@ -29,6 +29,7 @@ func MainMenu() {
 }
 
 func chooseOption(id, option string) {
+	tools.Cls()
 	var choose string
 	switch id {
 	case "1":
@@ -88,12 +89,28 @@ func chooseOption(id, option string) {
 			fmt.Println("Add Product's Data")
 			fmt.Println("-----------------------------------------------")
 			tools.Input("", &init)
-			tools.Input("Insert Product ID : ", &productCode)
+		ipid:
+			tools.Input("Insert Product ID  ex[P0015] (maxchar 5): ", &productCode)
+			if len(productCode) > 5 {
+				goto ipid
+			}
 			tools.Input("Insert Product Name : ", &productDesc)
-			tools.Input("Insert Brand Code : ", &brandCode)
-			tools.Input("Insert Category ID : ", &categoryID)
+		iban:
+			tools.Input("Insert Brand Code  ex[B0001] (maxchar 5): ", &brandCode)
+			if len(brandCode) > 5 {
+				goto iban
+			}
+		icat:
+			tools.Input("Insert Category ID  ex[C0005] (maxchar 5): ", &categoryID)
+			if len(categoryID) > 5 {
+				goto icat
+			}
 			tools.Input("Insert Product Price : ", &productPrice)
-			tools.Input("Insert Discount ID : ", &discountID)
+		idis:
+			tools.Input("Insert Discount ID  ex[D0000] (maxchar 5): ", &discountID)
+			if len(discountID) > 5 {
+				goto idis
+			}
 			Execute(conf).AddNewProduct(productCode, productDesc, categoryID, productPrice, discountID, brandCode)
 		case "2":
 			var init, productCode string
@@ -117,8 +134,16 @@ func chooseOption(id, option string) {
 			fmt.Println("Add Transaction's Data")
 			fmt.Println("-----------------------------------------------")
 			tools.Input("", &init)
-			tools.Input("Insert Transaction ID : ", &transactionCode)
-			tools.Input("Insert Product ID : ", &productId)
+		tid:
+			tools.Input("Insert Transaction ID ex[T0005] (maxchar 5): ", &transactionCode)
+			if len(transactionCode) > 5 {
+				goto tid
+			}
+		pid:
+			tools.Input("Insert Product ID : ex[P0006] (maxchar 5)", &productId)
+			if len(productId) > 5 {
+				goto pid
+			}
 			tools.Input("Insert Quantity : ", &transactionQTY)
 			Execute(conf).AddNewTransaction(transactionCode, productId, transactionQTY)
 		case "2":
