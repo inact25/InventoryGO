@@ -4,7 +4,14 @@ import (
 	"fmt"
 	_ "log"
 	"viper/models"
+	"viper/services"
 )
+
+func (ssa *Env) GetDataTransaction() {
+	transactionService := services.NewService(ssa.db)
+	transaction := transactionService.GetDataTransaction(1, 50)
+	ViewAllTransaction(transaction)
+}
 
 func ViewAllTransaction(transaction []*models.Transaction) {
 	data := []string{"No.", "Code", "Date", "Brand", "Product", "QTY"}

@@ -10,8 +10,8 @@ type Product struct {
 	BrandDesc,
 	ProductDesc,
 	CategoryID,
-	DiscountID string
-	ProductPrice int
+	DiscountID,
+	ProductPrice string
 }
 
 func GetDataProduct(db *sql.DB, pageNo, totalPerPage int) ([]*Product, error) {
@@ -45,4 +45,48 @@ func GetDataProduct(db *sql.DB, pageNo, totalPerPage int) ([]*Product, error) {
 	}
 
 	return products, nil
+}
+
+func AddNewProduct(db *sql.DB, product *Product) (string, error) {
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	stmt, err := db.Prepare("insert into product values	(?,?,?,?,?,?)")
+	if err != nil {
+		tx.Rollback()
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(product.ProductID, product.ProductDesc, product.CategoryID, product.ProductPrice, product.DiscountID, product.BrandDesc); err != nil {
+		tx.Rollback()
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	return "", tx.Commit()
+}
+
+func DeleteProduct(db *sql.DB, product *Product) (string, error) {
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	stmt, err := db.Prepare("delete from product where productID = ?")
+	if err != nil {
+		tx.Rollback()
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(product.ProductID); err != nil {
+		tx.Rollback()
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	return "", tx.Commit()
 }

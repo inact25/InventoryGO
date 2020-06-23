@@ -44,3 +44,48 @@ func GetDataTransaction(db *sql.DB, pageNo, totalPerPage int) ([]*Transaction, e
 
 	return transaction, nil
 }
+
+func AddNewTransaction(db *sql.DB, transaction *Transaction) (string, error) {
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatalf("%v", err)
+		return "", err
+	}
+
+	stmt, err := db.Prepare("insert into transaction (transactionCode, transactionDate, productID, transactionQTY) values ( ?, ?, ?, ?)")
+	if err != nil {
+		tx.Rollback()
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(transaction.TransactionCode, transaction.TransactionDate, transaction.ProductDesc, transaction.TransactionQTY); err != nil {
+		tx.Rollback()
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	return "", tx.Commit()
+}
+
+func DeleteTransaction(db *sql.DB, transaction *Transaction) (string, error) {
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	stmt, err := db.Prepare("delete from transaction where transactionCode = ?")
+	if err != nil {
+		tx.Rollback()
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(transaction.TransactionCode); err != nil {
+		tx.Rollback()
+		log.Fatalf("%v", err)
+		return "", err
+	}
+	return "", tx.Commit()
+}

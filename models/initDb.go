@@ -2,36 +2,32 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+
+	"viper/config"
+
+	"github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-//StartConnection : start connection to database
-func StartConnection(engine, data string) (*sql.DB, error) {
-	db, err := sql.Open(engine, data)
-	if err != nil {
-		log.Fatal(err)
+func InitDB(c *config.Conf) (*sql.DB, error) {
 
+	cfg := &mysql.Config{
+		User:   c.Db.DbUser,
+		Passwd: c.Db.DbPass,
+		Net:    "tcp",
+		Addr:   fmt.Sprintf("%v:%v", c.Db.DbHost, c.Db.DbPort),
+		DBName: c.Db.DbSchema,
 	}
-	//defer db.Close()
-	pingDB(db)
+	db, err := sql.Open("mysql", cfg.FormatDSN())
+	if err != nil {
+		log.Panic(err)
+	}
+
+	//Ping = check database availability
+	if err = db.Ping(); err != nil {
+		log.Panic(err)
+	}
 	return db, nil
-}
-
-//ErrorCheck : checking connection to the database
-func errorCheck(err error) {
-	if err != nil {
-		//panic(err.Error())
-		log.Fatal(err.Error())
-		//fmt.Println(err.Error())
-
-	}
-	//fmt.Print("Sucess DB Connected")
-
-}
-
-//PingDB : ping database
-func pingDB(db *sql.DB) {
-	err := db.Ping()
-	errorCheck(err)
-
 }
