@@ -1,5 +1,20 @@
 # InventoryGO
 Tech Inventory App using Golang and Console
+## Update 
+ Add Ability to
+```
+- Add product
+- Delete Product
+- Show All Product
+
+- Add Transaction
+- Delete Transaction
+- Show All Transaction
+
+- Show Daily Report
+- Show Monthly Report
+- Show All Report
+```
 
 ## create config file
 
@@ -15,48 +30,14 @@ DbSchema = 'yourDbName'
 ```
 ## create database
 
-this project using this database design
-```sql
-create database goInventory;
-use goInventory;
+this project using this database design [Download Sql File](https://drive.google.com/file/d/1XJIFJKeI54vIWa7u-Go3NkIGzdxndWUS/view?usp=sharing)
+![image of db](https://1.bp.blogspot.com/-K0i0Qhtc0Ts/XvH9C1vf0FI/AAAAAAAAIRA/0gxf3rmxr-8Ez9wBHhI0o25mD9WW6zXvwCK4BGAsYHg/d/cft.PNG)
 
-create table category (
-categoryID varchar (5) primary key,
-categoryDesc varchar(50) not null
-);
+## Future Update
 
-create table discount (
-discountID varchar(5) primary key,
-discountDesc varchar(50) not null
-);
-
-create table product (
-productID varchar(5) primary key,
-productDesc varchar(50) not null,
-categoryID varchar (5),
-productPrice int,
-discountID varchar(5),
-foreign key product_PtoC (categoryID) references category(categoryID),
-foreign key product_PtoD (discountID) references discount(discountID)
-);
-
-create table user (
-userID int primary key auto_increment,
-userName varchar (15) not null,
-userPass varchar (50) not null
-);
-
-create table userDetail (
-user int,
-user_fname varchar (25),
-user_lname varchar (25),
-userAddress varchar(50)
-);
-
-alter table userDetail add foreign key userDetail_UDtoU(userID) references user(userID);
-alter table discount modify column discountDesc int not null;
-
-select p.productID,p.productDesc, c.categoryDesc,p.productPrice, d.discountDesc from product p 
-inner join category c on p.categoryID = c.categoryID
-inner join discount d on p.discountID = d.discountID order by p.productID;
-```
+- Login
+- choose Category when add a product
+- choose brand when add a product and transaction
+- cloudSql
+- input validation
+- more
