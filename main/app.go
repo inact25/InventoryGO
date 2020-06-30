@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	view.MainMenu()
+	view.Login()
 }

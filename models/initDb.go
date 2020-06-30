@@ -14,13 +14,15 @@ import (
 func InitDB(c *config.Conf) (*sql.DB, error) {
 
 	cfg := &mysql.Config{
-		User:   c.Db.DbUser,
-		Passwd: c.Db.DbPass,
-		Net:    "tcp",
-		Addr:   fmt.Sprintf("%v:%v", c.Db.DbHost, c.Db.DbPort),
-		DBName: c.Db.DbSchema,
+		User:                 c.Db.DbUser,
+		Passwd:               c.Db.DbPass,
+		Net:                  "tcp",
+		Addr:                 fmt.Sprintf("%v:%v", c.Db.DbHost, c.Db.DbPort),
+		DBName:               c.Db.DbSchema,
+		AllowNativePasswords: c.Db.AllowNativePasswords,
 	}
 	db, err := sql.Open("mysql", cfg.FormatDSN())
+
 	if err != nil {
 		log.Panic(err)
 	}
